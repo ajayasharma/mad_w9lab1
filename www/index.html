@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta http-equiv="Access-Control-Allow-Origin" content="*">
+        <title>Listview - jQuery Mobile Demos</title>
+        <link rel="shortcut icon" href="jquery.mobile/images/favicon.ico">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+        <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+        <script src="js/jquery.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    <body>
+
+        <div data-role="page" id="listpage" data-quicklinks="true">
+            <div data-role="header">
+                <h1>My News Site</h1>
+            </div><!-- /header -->
+        
+            <div role="main" class="ui-content">
+                <h2>Recent News</h2>
+                <div data-demo-html="true">
+                    <ul data-role="listview" id="newslist">
+                        <li>Loading News</li>
+                    </ul>
+                </div><!--/demo-html -->
+            </div>
+        </div>
+        <div data-role="page" id="newspage" data-dialog="true" data-quicklinks="true">
+            <div data-role="header">
+                <h1>News in Detail</h1>
+            </div><!-- /header -->
+        
+            <div role="main" class="ui-content">
+                <h2 id="newsTitle"></h2>
+                <p id="newsContent"></p>
+            </div>
+        </div>
+
+        <script>
+            var articleData;
+            (function() {
+                var newsAPI = "https://newsapi.org/v2/top-headlines?sources=google-news&apiKey=9aec3f2fee644bd7a3404c8be382b464";
+                $.getJSON( newsAPI)
+                .done(function( data ) {
+                    if(data.status=="ok"){
+                        $("#newslist").empty();
+                        localStorage.clear();
+                        articleData = data.articles;
+                        $.each( data.articles, function( i, article ) {
+                            var title = $("<a>").attr("href","#newspage").attr("data-transition","slidedown").html(article.title).click({param1: i}, setData);
+                            var desc = $("<p>").html(article.description);
+                            var listitem = $("<li>");
+                            title.append(desc);
+                            listitem.append(title);
+                            $("#newslist").append(listitem);
+                            //$("<li>").html('<img><a href="#newspage" onClick="setData('+i+')" data-transition="slidedown">'+article.title+'</a><p>'+article.description+'</p>').appendTo("#newslist");
+                        });
+                        $("#newslist").listview("refresh");
+                    }
+                    
+                });
+            })();
+            function setData(event) {
+                var i = event.data.param1;
+                var title = articleData[i].title;
+                var content = articleData[i].content;
+                $("#newsTitle").html(title);
+                $("#newsContent").html(content); 9861481557
+            }
+        </script>
+    </body>
+</html>
