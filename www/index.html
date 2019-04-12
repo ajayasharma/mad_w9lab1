@@ -46,7 +46,7 @@
                 .done(function( data ) {
                     if(data.status=="ok"){
                         $("#newslist").empty();
-                        localStorage.clear();
+                        //localStorage.clear();
                         articleData = data.articles;
                         $.each( data.articles, function( i, article ) {
                             var title = $("<a>").attr("href","#newspage").attr("data-transition","slidedown").html(article.title).click({param1: i}, setData);
@@ -67,7 +67,7 @@
                 var title = articleData[i].title;
                 var content = articleData[i].content;
                 $("#newsTitle").html(title);
-                $("#newsContent").html(content); 9861481557
+                $("#newsContent").html(content);
             }
         </script>
     </body>
